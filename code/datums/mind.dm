@@ -70,7 +70,7 @@
 	///has this mind ever been an AI
 	var/has_ever_been_ai = FALSE
 
-
+	var/assigned_heirloom = null // BLUEMOON EDIT - лодаутные реликвии. Дерьмовейшее решение, но по-другому не знаю, как сделать, чтобы спавнящиеся под ногами лодаутные предметы мог обрабатывать квирк
 	var/force_escaped = FALSE  // Set by Into The Sunset command of the shuttle manipulator
 	var/list/learned_recipes //List of learned recipe TYPES.
 
@@ -99,12 +99,8 @@
 
 /datum/mind/Destroy()
 	SSticker.minds -= src
-	if(islist(antag_datums))
-		for(var/i in antag_datums)
-			var/datum/antagonist/antag_datum = i
-			if(antag_datum.delete_on_mind_deletion)
-				qdel(i)
-		antag_datums = null
+	QDEL_LIST(antag_datums)
+	QDEL_NULL(language_holder)
 	QDEL_NULL(skill_holder)
 	set_current(null)
 	soulOwner = null

@@ -39,6 +39,7 @@
 
 	remove_from_all_data_huds()
 	GLOB.mob_living_list -= src
+	GLOB.ssd_mob_list -= src
 	QDEL_LIST(diseases)
 	return ..()
 
@@ -542,6 +543,38 @@
 		if(alert(src, "You sure you want to sleep for a while?", "Sleep", "Yes", "No") == "Yes")
 			SetSleeping(400) //Short nap
 
+//SET_ACTIVITY START
+/mob/living/verb/set_activity()
+	set name = "Деятельность"
+	set desc = "Описывает то, что вы сейчас делаете."
+	set category = "IC"
+
+	if(activity)
+		activity = ""
+		to_chat(src, "<span class='notice'>Деятельность сброшена.</span>")
+		return
+	if(stat == CONSCIOUS)
+		display_typing_indicator()
+		activity = stripped_input(src, "Здесь можно описать продолжительную (долго длящуюся) деятельность, которая будет отображаться столько, сколько тебе нужно.", "Опиши свою деятельность", "", MAX_MESSAGE_LEN)
+		clear_typing_indicator()
+		if(activity)
+			activity = capitalize(activity)
+			return me_verb(activity)
+	else
+		to_chat(src, "<span class='warning'>Недоступно в твоем нынешнем состоянии.</span>")
+
+/mob/living/update_stat()
+	if(stat != CONSCIOUS)
+		activity = ""
+
+/mob/living/get_tooltip_data()
+	if(activity)
+		. = list()
+		. += activity
+
+//SET_ACTIVITY END
+
+
 /mob/proc/get_contents()
 
 /*CIT CHANGE - comments out lay_down proc to be modified in modular_citadel
@@ -887,7 +920,7 @@
 /mob/living/do_resist_grab(moving_resist, forced, silent = FALSE)
 	. = ..()
 	var/escchance
-	if(HAS_TRAIT(usr, TRAIT_GARROTED))
+	if(HAS_TRAIT(src, TRAIT_GARROTED))
 		escchance = 3
 	else
 		escchance = 30

@@ -258,6 +258,7 @@
 
 			dat += "<h2>Body</h2>"
 			dat += "<b>Gender:</b><a style='display:block;width:100px' href='?_src_=prefs;preference=gender;task=input'>[gender == MALE ? "Male" : (gender == FEMALE ? "Female" : (gender == PLURAL ? "Non-binary" : "Object"))]</a><BR>"
+			dat += "<b>Blood Color:</b> <span style='border:1px solid #161616; background-color: [blood_color];'><font color='[color_hex2num(blood_color) < 200 ? "FFFFFF" : "000000"]'>[blood_color]</font></span> <a href='?_src_=prefs;preference=blood_color;task=input'>Change</a><BR>"
 			if(pref_species.sexes)
 				dat += "<b>Body Model:</b><a style='display:block;width:100px' href='?_src_=prefs;preference=body_model'>[features["body_model"] == MALE ? "Masculine" : "Feminine"]</a><BR>"
 			dat += "<b>Limb Modification:</b><BR>"
@@ -1725,7 +1726,19 @@
 		// Causes arousal
 		// Allowed for ERP reasons
 		/datum/reagent/drug/aphrodisiac,
+		/datum/reagent/drug/aphrodisiacplus,
 
+		// Allowed for expansion reasons
+		/datum/reagent/fermi/breast_enlarger,
+		/datum/reagent/fermi/penis_enlarger,
+		/datum/reagent/fermi/butt_enlarger,
+
+		// Allowed for reduction reasons
+		/datum/reagent/fermi/BEsmaller,
+		/datum/reagent/fermi/PEsmaller,
+		/datum/reagent/fermi/AEsmaller_hypo,
+		// Code comment here, whoever named the AEsmaller_hypo needs to understand the chem shouldn't be named after the fact it's found in a hypo
+		
 		// Causes positive mood bonus
 		// On overdose: Causes negative mood penalty and disgust
 		/datum/reagent/drug/copium/gfluid,

@@ -207,15 +207,15 @@
 
 /datum/quirk/hallowed/add()
 	// Add examine text.
-	RegisterSignal(quirk_holder, COMSIG_PARENT_EXAMINE, .proc/quirk_examine_Hallowed)
+	RegisterSignal(quirk_holder, COMSIG_PARENT_EXAMINE, .proc/on_examine_holder)
 
 /datum/quirk/hallowed/remove()
 	// Remove examine text
 	UnregisterSignal(quirk_holder, COMSIG_PARENT_EXAMINE)
 
 // Quirk examine text.
-/datum/quirk/hallowed/proc/quirk_examine_Hallowed(atom/examine_target, mob/living/carbon/human/examiner, list/examine_list)
-	examine_list += "[quirk_holder.ru_who(TRUE)] излучает священную силу..."
+/datum/quirk/hallowed/proc/on_examine_holder(atom/examine_target, mob/living/carbon/human/examiner, list/examine_list)
+	examine_list += "[quirk_holder.p_they(TRUE)] излучает священную силу..."
 
 /datum/quirk/russian
 	name = "Русский дух"
@@ -268,22 +268,54 @@
 	// Apply the augment to the quirk holder
 	put_in.Insert(quirk_holder, null, TRUE, TRUE)
 
-// /datum/quirk/vacuum_resistance
-    // name = "Vacuum Resistance"
-    // desc = "Your body, whether due to technology, magic, or genetic engineering - is specially adapted to withstand and operate in the vacuum of space. You may still need a source of breathable air, however."
-    // value = 3
-    // gain_text = span_notice("Your physique attunes to the silence of space, now able to operate in zero pressure.")
-    // lose_text = span_notice("Your physiology reverts as your spacefaring gifts lay dormant once more.")
-    // var/list/perks = list(TRAIT_RESISTCOLD, TRAIT_RESISTLOWPRESSURE, TRAIT_LOWPRESSURECOOLING)
-//
-// /datum/quirk/vacuum_resistance/add()
-	// . = ..()
-	// var/mob/living/carbon/human/H = quirk_holder
-	// for(var/perk in perks)
-		// ADD_TRAIT(H, perk, ROUNDSTART_TRAIT)
-//
-// /datum/quirk/vacuum_resistance/remove()
-	// . = ..()
-	// var/mob/living/carbon/human/H = quirk_holder
-	// for(var/perk in perks)
-		// REMOVE_TRAIT(H, perk, ROUNDSTART_TRAIT)
+// /datum/quirk/restorative_metabolism
+// 	name = "Восстановительный Метаболизм"
+// 	desc = "Ваше тело обладает дифференцированной способностью к восстановлению, что позволяет вам медленно восстанавливаться после травм. Однако обратите внимание, что критические травмы, ранения или генетические повреждения все равно потребуют медицинской помощи."
+// 	value = 3
+// 	mob_trait = TRAIT_RESTORATIVE_METABOLISM
+// 	gain_text = span_notice("Вы чувствуете прилив жизненной силы, проходящей через ваше тело...")
+// 	lose_text = span_notice("Вы чувствуете, как ваши улучшенные способности к восстановлению исчезают...")
+// 	processing_quirk = TRUE
+
+// /datum/quirk/restorative_metabolism/on_process()
+// 	. = ..()
+// 	var/mob/living/carbon/human/H = quirk_holder
+
+// 	// The only_organic flag allows robotic biotypes to not be excluded.
+// 	H.adjustBruteLoss(-0.5, only_organic = FALSE) //The healing factor will only regenerate fully if not burnt beyond a specific threshold.
+// 	H.adjustFireLoss(-0.25,  only_organic = FALSE)
+// 	if(H.getBruteLoss() > 0 && H.getFireLoss() <= 50 || H.getFireLoss() > 0 && H.getFireLoss() <= 50)
+// 		H.adjustBruteLoss(-0.5, forced = TRUE, only_organic = FALSE)
+// 		H.adjustFireLoss(-0.25, forced = TRUE, only_organic = FALSE)
+// 	/* Doesn't heal robotic toxin damage (only_organic = FALSE not needed for tox),
+// 	another adjustToxLoss check with toxins_type = TOX_SYSCORRUPT,
+// 	(or just adding TOX_OMNI to the already existing one) could be added to heal robotic corruption,
+// 	but would make robotic species unbalanced.
+// 	*/
+// 	else if (H.getToxLoss() <= 90)
+// 		H.adjustToxLoss(-0.3, forced = TRUE)
+
+/datum/quirk/breathless
+	name = "Недышащий"
+	desc = "Благодаря генной инженерии, технологиям или магии блюспейса вам больше не нужен воздух для жизнедеятельности. Это также означает, что проведение таких жизненно важных манипуляций, как искусственное дыхание, станет невозможным."
+	value = 3
+	medical_record_text = "Биологические показатели пациента свидетельствуют об отсутствии необходимости в дыхании."
+	gain_text = span_notice("Вам больше не нужно дышать.")
+	lose_text = span_notice("Вам нужно снова дышать...")
+	processing_quirk = TRUE
+
+/datum/quirk/breathless/add()
+	. = ..()
+	var/mob/living/carbon/human/H = quirk_holder
+	ADD_TRAIT(H,TRAIT_NOBREATH,ROUNDSTART_TRAIT)
+
+/datum/quirk/breathless/remove()
+	. = ..()
+	var/mob/living/carbon/human/H = quirk_holder
+	REMOVE_TRAIT(H,TRAIT_NOBREATH, ROUNDSTART_TRAIT)
+
+/datum/quirk/breathless/on_process()
+	. = ..()
+	var/mob/living/carbon/human/H = quirk_holder
+	H.adjustOxyLoss(-3) /* Bandaid-fix for a defibrillator "bug",
+	Which causes oxy damage to stack for mobs that don't breathe */

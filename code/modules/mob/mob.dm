@@ -21,30 +21,38 @@
 	hook_vr("mob_new",list(src))
 
 /mob/Destroy()//This makes sure that mobs with clients/keys are not just deleted from the game.
+	// if(client)
+	// 	stack_trace("Mob with client has been deleted.")
+	// else if(ckey)
+	// 	stack_trace("Mob without client but with associated ckey, [ckey], has been deleted.")
+	unset_machine()
 	remove_from_mob_list()
 	remove_from_dead_mob_list()
 	remove_from_alive_mob_list()
 	QDEL_LIST(mob_spell_list)
 	GLOB.all_clockwork_mobs -= src
+	// remove_from_mob_suicide_list()
 	focus = null
 	LAssailant = null
 	movespeed_modification = null
+	if(length(progressbars))
+		stack_trace("[src] destroyed with elements in its progressbars list.")
+		progressbars = null
 	for (var/alert in alerts)
 		clear_alert(alert, TRUE)
-	if(observers && observers.len)
-		for(var/M in observers)
-			var/mob/dead/observe = M
+	if(observers?.len)
+		for(var/mob/dead/observe as anything in observers)
 			observe.reset_perspective(null)
 	dispose_rendering()
 	qdel(hud_used)
-	for(var/cc in client_colours)
-		qdel(cc)
-	client_colours = null
-	ghostize()
+	QDEL_LIST(client_colours)
+	ghostize(can_reenter_corpse = FALSE) //False, since we're deleting it currently
 	if(mind?.current == src) //Let's just be safe yeah? This will occasionally be cleared, but not always. Can't do it with ghostize without changing behavior
 		mind.set_current(null)
-	..()
-	return QDEL_HINT_HARDDEL
+	// if(mock_client)
+	// 	mock_client.mob = null
+
+	return ..()
 
 /mob/GenerateTag()
 	tag = "mob_[next_mob_id++]"
@@ -1137,6 +1145,13 @@ GLOBAL_VAR_INIT(exploit_warn_spam_prevention, 0)
 	for(var/obj/item/I in held_items)
 		if(I.item_flags & SLOWS_WHILE_IN_HAND)
 			. += I.slowdown
+
+/mob/proc/set_stat(new_stat)
+	if(new_stat == stat)
+		return
+	. = stat
+	stat = new_stat
+	SEND_SIGNAL(src, COMSIG_MOB_STATCHANGE, new_stat, .)
 
 /**
   * Mostly called by doUnEquip()

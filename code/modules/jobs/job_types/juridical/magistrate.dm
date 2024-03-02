@@ -23,8 +23,10 @@
 		"Prosecutor",
 		"NanoTrasen Consultant",
 		"Syndicate Advisor",
+		"Netorare",
+		"Commissar",
 		"NanoTrasen Slut",
-		"Netorare"
+		"Syndicate Slut",
 		)
 
 	outfit = /datum/outfit/job/ntr
@@ -36,7 +38,7 @@
 
 	mind_traits = list(TRAIT_LAW_ENFORCEMENT_METABOLISM)
 
-	blacklisted_quirks = list(/datum/quirk/mute, /datum/quirk/brainproblems, /datum/quirk/blindness, /datum/quirk/monophobia)
+	blacklisted_quirks = list(/datum/quirk/mute, /datum/quirk/brainproblems, /datum/quirk/blindness, /datum/quirk/monophobia, /datum/quirk/bluemoon_criminal)
 
 	display_order = JOB_DISPLAY_ORDER_NTR
 	threat = 2
