@@ -4209,7 +4209,6 @@
 #include "modular_bluemoon\Fink\code\recipes\recipes_weapon_and_ammo.dm"
 #include "modular_bluemoon\Fink\code\structures\lfwb_statues.dm"
 #include "modular_bluemoon\Fink\code\vending\autodrobe.dm"
-#include "modular_bluemoon\Fink\code\vending\chap_wardrobe.dm"
 #include "modular_bluemoon\Fink\code\vending\engivend.dm"
 #include "modular_bluemoon\Fink\code\vending\kinkmate.dm"
 #include "modular_bluemoon\FlaurosStuff\code\game\objects\items\devices\PDA\cart.dm"
