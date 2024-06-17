@@ -249,8 +249,8 @@
 
 //Энергетический балистический щит
 /obj/item/shield/inteq_energy
-	name = "Еnergy ballistic shield"
-	desc = "A shield that reflects almost all ballistic projectiles, but is useless against energy attacks. It can be retracted, expanded, and stored anywhere."
+	name = "Old energy shield"
+	desc = "Устаревшая на несколько поколений модель энергетического щита. Использует механические ограничители силового поля и эрганомика немного страдает, но всё ещё является желанным элементом экипировки."
 	icon = 'modular_bluemoon/Ren/Icons/Obj/misc.dmi'
 	lefthand_file = 'modular_bluemoon/Ren/Icons/Mob/inhand_l.dmi'
 	righthand_file = 'modular_bluemoon/Ren/Icons/Mob/inhand_r.dmi'
@@ -302,6 +302,9 @@
 		to_chat(user, "<span class='notice'>[src] can now be concealed.</span>")
 	add_fingerprint(user)
 
+
+
+
 //--------------------------------------------------------------------------------[Ящики карго]------------------------------------------------------------------
 /datum/supply_pack/goody/guitarbag
 	name = "Guitar bag"
@@ -314,3 +317,51 @@
 	desc = "Красный плащ с чёрным силуэтом черепа в очках. Ходят слухи, что он принадлежал величайшему шахтёру, чей бур мог пронзить небеса. А теперь это ещё один символ победившего капитализма."
 	cost = 3000
 	contains = list(/obj/item/clothing/neck/cloak/miner)
+
+//---------------------------------------------------------------------------------------------------------------------------------
+/obj/item/robot_module/inteq
+	name = "InteQ Engineering"
+	added_channels = list(RADIO_CHANNEL_ENGINEERING = 1)
+	basic_modules = list(
+		/obj/item/pickaxe/drill/jackhammer/angle_grinder,
+		/obj/item/assembly/flash/cyborg,
+		/obj/item/construction/rcd/borg, //----------------
+		/obj/item/pipe_dispenser,
+		/obj/item/weldingtool/largetank/cyborg,
+		/obj/item/screwdriver/cyborg,
+		/obj/item/wrench/cyborg,
+		/obj/item/crowbar/cyborg,
+		/obj/item/wirecutters/cyborg,
+		/obj/item/multitool/cyborg,
+		/obj/item/storage/part_replacer/cyborg,
+		/obj/item/holosign_creator/combifan,
+		/obj/item/gripper,
+		/obj/item/lightreplacer/cyborg,
+		/obj/item/assembly/signaler/cyborg,
+		/obj/item/areaeditor/blueprints/cyborg,
+		/obj/item/electroadaptive_pseudocircuit,
+		/obj/item/stack/sheet/metal/cyborg,
+		/obj/item/stack/sheet/glass/cyborg,
+		/obj/item/stack/sheet/rglass/cyborg,
+		/obj/item/stack/rods/cyborg,
+		/obj/item/stack/tile/plasteel/cyborg,
+		/obj/item/stack/cable_coil/cyborg)
+	emag_modules = list(/obj/item/borg/stun)
+	ratvar_modules = list(
+		/obj/item/clockwork/slab/cyborg/engineer,
+		/obj/item/clockwork/replica_fabricator/cyborg)
+	cyborg_base_icon = "mekainteq"
+	cyborg_icon_override = 'modular_bluemoon/Ren/Icons/Mob/robot.dmi'
+	hasrest = TRUE
+	magpulsing = TRUE
+	hat_offset = -4
+
+/obj/item/robot_module/inteq/rebuild_modules()
+    ..()
+    var/mob/living/silicon/robot/syndicatejack = loc
+    syndicatejack.scrambledcodes = TRUE // We're rouge now
+
+/obj/item/robot_module/inteq/remove_module(obj/item/I, delete_after)
+    ..()
+    var/mob/living/silicon/robot/syndicatejack = loc
+    syndicatejack.scrambledcodes = FALSE // Friends with the AI again
