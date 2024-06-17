@@ -86,7 +86,7 @@
 	act_hypno.Grant(quirk_mob)
 
 	// Add examine text
-	RegisterSignal(quirk_holder, COMSIG_PARENT_EXAMINE, .proc/on_examine_holder)
+	RegisterSignal(quirk_holder, COMSIG_PARENT_EXAMINE, PROC_REF(on_examine_holder))
 
 /datum/quirk/Hypnotic_gaze/remove()
 	// Define quirk mob
@@ -142,9 +142,9 @@
 //Zombies + Cumplus Fix\\
 
 /datum/quirk/undead
-    name = "Undeath"
-    desc = "Your body, be it anomalous, or just outright refusing to die - has indeed become undead. Due to this you may be hungrier."
-    value = 0
+    name = "Не-мёртвый"
+    desc = "Ваше тело, будь то аномальное или просто отказывающееся умирать, действительно стало нежитью. Из-за этого вы испытываете сильный голод."
+    value = 2
     mob_trait = TRAIT_UNDEAD
     processing_quirk = TRUE
 	// Note: The Undead cannot take advantage of healing viruses and genetic mutations, since they have no DNA.
@@ -167,11 +167,12 @@
         REMOVE_TRAIT(H,zperks[A], null)
 
 /datum/quirk/undead/on_process()
-    . = ..()
-    var/mob/living/carbon/human/H = quirk_holder
-    H.adjust_nutrition(-0.025)//The Undead are Hungry.
-    H.set_screwyhud(SCREWYHUD_HEALTHY)
-    H.adjustOxyLoss(-3) //Stops a defibrilator bug. Note to future self: Fix defib bug.
+	. = ..()
+	var/mob/living/carbon/human/H = quirk_holder
+	H.adjust_nutrition(-0.025)
+	H.adjust_thirst(-0.025)
+	H.set_screwyhud(SCREWYHUD_HEALTHY)
+	H.adjustOxyLoss(-3) //Stops a defibrilator bug. Note to future self: Fix defib bug.
 
 /datum/quirk/cum_plus
 	name = "Сверхпродуктивные Гениталии"
@@ -298,6 +299,7 @@
 	gain_text = span_notice("Вы начинаете ощущать специфические запахи, исходящие от чужих промежностей...")
 	lose_text = span_notice("Чужие гениталии начинают пахнуть для вас одинаково...")
 	medical_record_text = "Пациент добивался того, чтобы доктор провёл яйцами по его лицу."
+	human_only = FALSE
 
 /datum/quirk/fluid_infuser
 	name = "Тядзин"
@@ -516,8 +518,8 @@
 
 /datum/quirk/nudist/add()
 	// Register signal handlers
-	RegisterSignal(quirk_holder, COMSIG_MOB_UPDATE_GENITALS, .proc/check_outfit)
-	RegisterSignal(quirk_holder, COMSIG_PARENT_EXAMINE, .proc/quirk_examine_nudist)
+	RegisterSignal(quirk_holder, COMSIG_MOB_UPDATE_GENITALS, PROC_REF(check_outfit))
+	RegisterSignal(quirk_holder, COMSIG_PARENT_EXAMINE, PROC_REF(quirk_examine_nudist))
 
 /datum/quirk/nudist/remove()
 	// Remove mood event
@@ -740,7 +742,7 @@ var/static/list/ukraine_replacements = list(
 	if (prob(75))
 		for (var/key in ukraine_replacements)
 			var/regex/rg = regex("(\\A|\[\\s|.,\\-!/?~\])([key])(\\Z|\[\\s|.,\\-!/?~\])")
-			message = rg.Replace_char(message, /proc/ukraine_replace)
+			message = rg.Replace(message, GLOBAL_PROC_REF(ukraine_replace))
 
 		message = replacetextEx_char(message, "ы", "и")
 		message = replacetextEx_char(message, "и", "і")
@@ -818,14 +820,14 @@ var/static/list/ukraine_replacements = list(
 	ADD_TRAIT(quirk_mob,TRAIT_NOTHIRST,ROUNDSTART_TRAIT)
 
 	// Set skin tone, if possible
-	// if(!quirk_mob.dna.skin_tone_override)
-	// 	quirk_mob.skin_tone = "albino"
+	if(!quirk_mob.dna.skin_tone_override)
+		quirk_mob.skin_tone = "albino"
 
 	// Add quirk language
 	quirk_mob.grant_language(/datum/language/vampiric, TRUE, TRUE, LANGUAGE_BLOODSUCKER)
 
 	// Register examine text
-	RegisterSignal(quirk_holder, COMSIG_PARENT_EXAMINE, .proc/quirk_examine_bloodfledge)
+	RegisterSignal(quirk_holder, COMSIG_PARENT_EXAMINE, PROC_REF(quirk_examine_bloodfledge))
 
 /datum/quirk/bloodfledge/post_add()
 	// Define quirk mob
@@ -1022,3 +1024,12 @@ var/static/list/ukraine_replacements = list(
 	else
 		// Add hunger text
 		examine_list += span_warning(examine_hunger_public)
+
+/datum/quirk/kiss_slut
+	name = "Чувствительные Губы"
+	desc = "Одна только мысль о поцелуе заставляет вас краснеть и возбуждаться, эффективно усиляя ваше возбуждение с каждым поцелуем."
+	value = 0
+	mob_trait = TRAIT_KISS_SLUT
+	gain_text = span_lewd("Вам хочется поцеловать кого-нибудь...")
+	lose_text = span_notice("Вас больше не тянет целоваться...")
+	medical_record_text = "Пациент проявляет необычайную симпатию к поцелуям."

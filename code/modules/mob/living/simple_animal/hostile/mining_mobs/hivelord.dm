@@ -96,7 +96,7 @@
 	. = ..()
 	if(swarming)
 		AddComponent(/datum/component/swarming) //oh god not the bees
-	addtimer(CALLBACK(src, .proc/death), 100)
+	addtimer(CALLBACK(src, PROC_REF(death)), 100)
 
 //Legion
 /mob/living/simple_animal/hostile/asteroid/hivelord/legion
@@ -382,7 +382,7 @@
 			if(prob(50))
 				neck = /obj/item/bedsheet/rd/royal_cape
 			if(prob(10))
-				l_pocket = pick(list(/obj/item/crowbar/power, /obj/item/wrench/power, /obj/item/weldingtool/experimental))
+				l_pocket = pick(list(/obj/item/crowbar/power, /obj/item/wrench/power, /obj/item/weldingtool/experimental, /obj/item/multitool/tricorder))
 		if("YeOlde")
 			mob_gender = FEMALE
 			uniform = /obj/item/clothing/under/costume/maid

@@ -68,6 +68,7 @@
 	visor_flags_cover = MASKCOVERSEYES
 	resistance_flags = FIRE_PROOF
 	flavor_adjust = FALSE
+	can_toggle = TRUE
 
 /obj/item/clothing/mask/gas/welding/attack_self(mob/user)
 	weldingvisortoggle(user)
@@ -100,6 +101,18 @@
 	strip_delay = 60
 	item_state = "syndicate_gasmask"
 	w_class = WEIGHT_CLASS_SMALL
+
+/obj/item/clothing/mask/gas/syndicate/cool_version
+	name = "Tactical Gasmask"
+	desc = "A mask with a red visor and special filters. It seems to have a kind of cat whiskers on it."
+	icon_state = "syndicate_cool"
+	mutantrace_variation = STYLE_DIGITIGRADE|STYLE_NO_ANTHRO_ICON
+
+/obj/item/clothing/mask/gas/syndicate/blackcool_version
+	name = "CFIS Gasmask"
+	desc = "Tactical gasmask for Catcrin Foreign Intelligence Service operatives. The compact mask has dark glass and small filters in the front part of the mask with breath venting."
+	icon_state = "syndicate_blackcool"
+	mutantrace_variation = STYLE_DIGITIGRADE|STYLE_NO_ANTHRO_ICON
 
 /obj/item/clothing/mask/gas/clown_hat
 	name = "Clown Wig and Mask"
@@ -141,7 +154,7 @@
 		user.update_inv_wear_mask()
 		for(var/X in actions)
 			var/datum/action/A = X
-			A.UpdateButtonIcon()
+			A.UpdateButtons()
 		to_chat(user, "<span class='notice'>Your Clown Mask has now morphed into [choice], all praise the Honkmother!</span>")
 		return TRUE
 
@@ -207,7 +220,7 @@
 		user.update_inv_wear_mask()
 		for(var/X in actions)
 			var/datum/action/A = X
-			A.UpdateButtonIcon()
+			A.UpdateButtons()
 		to_chat(user, "<span class='notice'>Your Mime Mask has now morphed into [choice]!</span>")
 		return TRUE
 
@@ -300,7 +313,7 @@
 		user.update_inv_wear_mask()
 		for(var/X in actions)
 			var/datum/action/A = X
-			A.UpdateButtonIcon()
+			A.UpdateButtons()
 		to_chat(M, "The Tiki Mask has now changed into the [choice] Mask!")
 		return TRUE
 

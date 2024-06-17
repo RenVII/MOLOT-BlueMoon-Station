@@ -121,11 +121,11 @@
 	crate_type = /obj/structure/closet/crate/secure/plasma
 
 /datum/supply_pack/security/armory/laserarmor
-	name = "Reflector Vest Crate"
+	name = "Ablative Trenchcoat crate"
 	desc = "Содержит два жилета из материала с высокой светоотражающей способностью. Каждый элемент брони рассеивает энергию лазера более чем наполовину, а также дает хороший шанс полностью отразить лазер. Для открытия требуется доступ к оружейной."
 	cost = 2000
-	contains = list(/obj/item/clothing/suit/armor/laserproof,
-					/obj/item/clothing/suit/armor/laserproof)
+	contains = list(/obj/item/clothing/suit/hooded/ablative,
+					/obj/item/clothing/suit/hooded/ablative)
 	crate_name = "reflector vest crate"
 	crate_type = /obj/structure/closet/crate/secure/plasma
 
@@ -223,7 +223,16 @@
 					/obj/item/kitchen/knife/combat,
 					/obj/item/clothing/gloves/tackler/combat/insulated,
 					/obj/item/clothing/gloves/tackler/combat/insulated)
-	crate_name = "swat crate"
+	crate_name = "SWAT Crate"
+
+/datum/supply_pack/security/armory/altyn_helmets
+	name = "Altyn Helmets Crate"
+	desc = "Содержит три специальных шлема типа 'АЛТЫН'. Для открытия требуется доступ к оружейной."
+	cost = 1750
+	contains = list(/obj/item/clothing/head/helmet/swat/nanotrasen/altyn,
+					/obj/item/clothing/head/helmet/swat/nanotrasen/altyn,
+					/obj/item/clothing/head/helmet/swat/nanotrasen/altyn)
+	crate_name = "Altyn Helmets Crate"
 
 /datum/supply_pack/security/armory/swat/updated_medsec
 	name = "ERT Armor Crate | MedSec"

@@ -93,10 +93,12 @@
 /obj/machinery/jukebox/ui_data(mob/user)
 	var/list/data = list()
 	data["active"] = active
-	data["songs"] = list()
-	for(var/datum/track/S in SSjukeboxes.songs)
-		var/list/track_data = list(name = S.song_name)
-		data["songs"] += list(track_data)
+	// BLUEMOON DEL -- ищи в modular_bluemoon/jukebox
+	// data["songs"] = list()
+	// for(var/datum/track/S in SSjukeboxes.songs)
+	// 	var/list/track_data = list(name = S.song_name)
+	// 	data["songs"] += list(track_data)
+	// BLUEMOON DEL END
 	data["queued_tracks"] = list()
 	for(var/datum/track/S in queuedplaylist)
 		var/list/track_data = list(name = S.song_name)
@@ -368,22 +370,22 @@
 				glow.update_light()
 				continue
 		if(prob(2))  // Unique effects for the dance floor that show up randomly to mix things up
-			INVOKE_ASYNC(src, .proc/hierofunk)
+			INVOKE_ASYNC(src, PROC_REF(hierofunk))
 		sleep(playing.song_beat)
 
 #undef DISCO_INFENO_RANGE
 
 /obj/machinery/jukebox/disco/proc/dance(var/mob/living/M) //Show your moves
 	set waitfor = FALSE
-	switch(rand(0,9))
-		if(0 to 1)
-			dance2(M)
-		if(2 to 3)
-			dance3(M)
-		if(4 to 6)
-			dance4(M)
-		if(7 to 9)
-			dance5(M)
+	// switch(rand(0,9))
+	// 	if(0 to 1)
+	dance2(M) // остался только эмоут, не ломающий спрайты
+		// if(2 to 3)
+		// 	dance3(M)
+		// if(4 to 6)
+		// 	dance4(M)
+		// if(7 to 9)
+		// 	dance5(M)
 
 /obj/machinery/jukebox/disco/proc/dance2(var/mob/living/M)
 	for(var/i = 1, i < 10, i++)

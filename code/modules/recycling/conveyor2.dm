@@ -132,13 +132,13 @@ GLOBAL_LIST_EMPTY(conveyors_by_id)
 		return
 	use_power(6)
 	affecting = loc.contents - src		// moved items will be all in loc
-	addtimer(CALLBACK(src, .proc/convey, affecting), 1)
+	addtimer(CALLBACK(src, PROC_REF(convey), affecting), 1)
 
 /obj/machinery/conveyor/proc/convey(list/affecting)
 	var/turf/T = get_step(src, movedir)
-	if(length(T.contents) > 150)
+	if(length(T.contents) > 25)
 		return
-	affecting.len = min(affecting.len, 150 - length(T.contents))
+	affecting.len = min(affecting.len, 25 - length(T.contents))
 	for(var/atom/movable/A in affecting)
 		if((A.loc == loc) && A.has_gravity())
 			A.ConveyorMove(movedir)

@@ -6,11 +6,15 @@
 	write_log_target = "was given head by"
 	interaction_sound = null
 	var/fucktarget = "vagina"
+	p13user_emote = PLUG13_EMOTE_MOUTH
+	p13target_emote = PLUG13_EMOTE_VAGINA
 
 /datum/interaction/lewd/oral/blowjob
 	description = "Член. Отсосать."
 	required_from_target_exposed = INTERACTION_REQUIRE_PENIS
 	fucktarget = "penis"
+	p13user_emote = PLUG13_EMOTE_MOUTH
+	p13target_emote = PLUG13_EMOTE_PENIS
 
 /datum/interaction/lewd/oral/display_interaction(mob/living/user, mob/living/partner)
 	var/message
@@ -118,5 +122,9 @@
 									'modular_sand/sound/interactions/bj10.ogg',
 									'modular_sand/sound/interactions/bj11.ogg'), 50, 1, -1)
 	user.visible_message(span_lewd("<b>\The [user]</b> [message]"), ignored_mobs = user.get_unconsenting())
-	if(fucktarget != "penis" || partner.can_penetrating_genital_cum())
-		partner.handle_post_sex(NORMAL_LUST, CUM_TARGET_MOUTH, user, genital)
+//SPLURT EDIT START
+	if(fucktarget == "penis" && partner.can_penetrating_genital_cum())
+		partner.handle_post_sex(lust_increase, CUM_TARGET_MOUTH, user, ORGAN_SLOT_PENIS)
+	else if(fucktarget == "vagina" && partner.has_vagina())
+		partner.handle_post_sex(lust_increase, CUM_TARGET_MOUTH, user, ORGAN_SLOT_VAGINA)
+//SPLURT EDIT END

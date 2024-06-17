@@ -32270,9 +32270,9 @@
 /area/medical/medbay/central)
 "qLL" = (
 /obj/structure/rack,
-/obj/item/clothing/suit/armor/laserproof,
-/obj/item/clothing/suit/armor/laserproof,
-/obj/item/clothing/suit/armor/laserproof,
+/obj/item/clothing/suit/hooded/ablative,
+/obj/item/clothing/suit/hooded/ablative,
+/obj/item/clothing/suit/hooded/ablative,
 /obj/item/gun/energy/temperature/security,
 /obj/item/gun/energy/temperature/security,
 /obj/item/gun/energy/ionrifle,
@@ -45103,7 +45103,7 @@
 	pixel_x = 3;
 	pixel_y = -3
 	},
-/obj/item/clothing/suit/armor/brigdoc/armor,
+/obj/item/clothing/suit/armor/brigdoc,
 /obj/item/clothing/head/helmet/brigdoc,
 /obj/machinery/recharger{
 	pixel_x = 6;

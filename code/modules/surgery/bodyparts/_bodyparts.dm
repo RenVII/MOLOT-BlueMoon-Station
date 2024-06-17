@@ -14,6 +14,7 @@
 	var/needs_processing = FALSE
 	var/ru_name = ""
 	var/ru_name_v = ""
+	var/ru_name_y = ""
 	var/ru_name_capital = ""
 
 	var/body_zone //BODY_ZONE_CHEST, BODY_ZONE_L_ARM, etc , used for def_zone
@@ -413,7 +414,7 @@
 		for(var/i in clothing)
 			var/obj/item/clothing/clothes_check = i
 			// unlike normal armor checks, we tabluate these piece-by-piece manually so we can also pass on appropriate damage the clothing's limbs if necessary
-			if(clothes_check.armor.getRating(WOUND))
+			if(clothes_check.armor?.getRating(WOUND))
 				bare_wound_bonus = 0
 				break
 
@@ -469,10 +470,10 @@
 	if(owner && ishuman(owner))
 		var/mob/living/carbon/human/H = owner
 		var/list/clothing = H.clothingonpart(src)
-		for(var/c in clothing)
-			var/obj/item/clothing/C = c
+		for(var/obj/item/clothing/C as anything in clothing)
 			// unlike normal armor checks, we tabluate these piece-by-piece manually so we can also pass on appropriate damage the clothing's limbs if necessary
-			armor_ablation += C.armor.getRating(WOUND)
+			if(C.armor)
+				armor_ablation += C.armor.getRating(WOUND)
 			if(wounding_type == WOUND_SLASH)
 				C.take_damage_zone(body_zone, damage, BRUTE, armour_penetration)
 			else if(wounding_type == WOUND_BURN && damage >= 10) // lazy way to block freezing from shredding clothes without adding another var onto apply_damage()
@@ -653,7 +654,10 @@
 /obj/item/bodypart/proc/update_limb(dropping_limb, mob/living/carbon/source)
 	body_markings_list = list()
 	var/mob/living/carbon/C
-	owner.create_weakref()
+	if(source)
+		source.create_weakref()
+	else
+		owner.create_weakref()
 	if(source)
 		C = source
 		if(!original_owner)
@@ -845,11 +849,17 @@
 
 	var/list/markings_list = list()
 	if(is_organic_limb())
+		// BLUEMOON ADD START - красивые ноги
+		var/use_racial_sprite = FALSE
+		if(istype(src, /obj/item/bodypart/l_leg) || istype(src, /obj/item/bodypart/r_leg))
+			if(species_id in list(SPECIES_HUMAN, SPECIES_MAMMAL, SPECIES_XENOHYBRID, SPECIES_SLIME_LUMI, SPECIES_SLIME, SPECIES_SYNTH_LIZARD, SPECIES_STARGAZER, SPECIES_JELLY, "vox")) // заносим только те расы, у которых есть свои прорисованные ноги. Иначе используется бэкап ниже
+				use_racial_sprite = TRUE
+		// BLUEMOON ADD END
 		limb.icon = base_bp_icon || 'icons/mob/human_parts.dmi'
 		if(should_draw_gender)
 			limb.icon_state = "[species_id]_[body_zone]_[icon_gender]"
 		else if (use_digitigrade)
-			if(base_bp_icon == DEFAULT_BODYPART_ICON_ORGANIC) //Compatibility hack for the current iconset.
+			if(!use_racial_sprite) // BLUEMOON CHANGES - was if(base_bp_icon == DEFAULT_BODYPART_ICON_ORGANIC) - чтобы использовались наши спрайты ног
 				limb.icon_state = "[digitigrade_type]_[use_digitigrade]_[body_zone]"
 			else
 				limb.icon_state = "[species_id]_[digitigrade_type]_[use_digitigrade]_[body_zone]"
@@ -857,7 +867,7 @@
 			limb.icon_state = "[species_id]_[body_zone]"
 
 		if(istype(src, /obj/item/bodypart/l_leg) || istype(src, /obj/item/bodypart/r_leg))
-			second_limb = image(layer = -BODYPARTS_LAYER, dir = image_dir)
+			second_limb = image(layer = -BODYPARTS_LAYER-0.1, dir = image_dir) // BLUEMOON CHANGES - WAS second_limb = image(layer = -BODYPARTS_LAYER, dir = image_dir) - фикс для отображения ног (РАБОТАЕТ ТОЛЬКО ЕСЛИ ИСПОЛЬЗУЕТСЯ НАШ GREYSCALE ФАЙЛ КОНЕЧНОСТЕЙ)
 			second_limb.icon = limb.icon
 			. += second_limb
 

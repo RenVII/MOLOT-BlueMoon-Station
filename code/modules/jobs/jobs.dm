@@ -1,5 +1,6 @@
 GLOBAL_LIST_INIT(command_positions, list(
 	"Captain",
+	"Bridge Officer",
 	"Head of Personnel",
 	"Head of Security",
 	"Chief Engineer",
@@ -15,8 +16,9 @@ GLOBAL_LIST_INIT(engineering_positions, list(
 	"Atmospheric Technician"))
 
 GLOBAL_LIST_INIT(law_positions, list(
-	"Lawyer",
-	"Bridge Officer"))
+	"NanoTrasen Representative",
+	"Internal Affairs Agent",
+	))
 
 
 GLOBAL_LIST_INIT(medical_positions, list(
@@ -26,7 +28,8 @@ GLOBAL_LIST_INIT(medical_positions, list(
 	"Virologist",
 	"Paramedic",
 	"Psychologist",
-	"Chemist"))
+	"Chemist",
+	"Brig Physician"))
 
 
 GLOBAL_LIST_INIT(science_positions, list(
@@ -131,18 +134,18 @@ GLOBAL_PROTECT(exp_specialmap)
 	var/static/regex/borg_expand = new("(?<!cy)borg")
 
 	job = lowertext(job)
-	job = cap_expand.Replace_char(job, "captain")
-	job = cmo_expand.Replace_char(job, "chief medical officer")
-	job = hos_expand.Replace_char(job, "head of security")
-	job = hop_expand.Replace_char(job, "head of personnel")
-	job = rd_expand.Replace_char(job, "research director")
-	job = ce_expand.Replace_char(job, "chief engineer")
-	job = qm_expand.Replace_char(job, "quartermaster")
-	job = sec_expand.Replace_char(job, "security officer")
-	job = engi_expand.Replace_char(job, "station engineer")
-	job = atmos_expand.Replace_char(job, "atmospheric technician")
-	job = doc_expand.Replace_char(job, "medical doctor")
-	job = mine_expand.Replace_char(job, "shaft miner")
-	job = chef_expand.Replace_char(job, "cook")
-	job = borg_expand.Replace_char(job, "cyborg")
+	job = cap_expand.Replace(job, "captain")
+	job = cmo_expand.Replace(job, "chief medical officer")
+	job = hos_expand.Replace(job, "head of security")
+	job = hop_expand.Replace(job, "head of personnel")
+	job = rd_expand.Replace(job, "research director")
+	job = ce_expand.Replace(job, "chief engineer")
+	job = qm_expand.Replace(job, "quartermaster")
+	job = sec_expand.Replace(job, "security officer")
+	job = engi_expand.Replace(job, "station engineer")
+	job = atmos_expand.Replace(job, "atmospheric technician")
+	job = doc_expand.Replace(job, "medical doctor")
+	job = mine_expand.Replace(job, "shaft miner")
+	job = chef_expand.Replace(job, "cook")
+	job = borg_expand.Replace(job, "cyborg")
 	return job

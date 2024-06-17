@@ -4,6 +4,8 @@
 	required_from_user_exposed = INTERACTION_REQUIRE_PENIS
 	required_from_target = INTERACTION_REQUIRE_MOUTH
 	var/fucktarget = "penis"
+	p13user_emote = PLUG13_EMOTE_PENIS
+	p13target_emote = PLUG13_EMOTE_FACE
 
 /datum/interaction/lewd/facefuck/vag
 	description = "Вагина. Потереться об рот."
@@ -111,6 +113,14 @@
 	interaction_sound = null
 	required_from_user_exposed = INTERACTION_REQUIRE_PENIS
 	required_from_target = INTERACTION_REQUIRE_MOUTH
+	p13user_emote = PLUG13_EMOTE_PENIS
+	p13target_emote = PLUG13_EMOTE_FACE
+	p13user_duration = PLUG13_DURATION_MEDIUM
+	p13target_duration = PLUG13_DURATION_MEDIUM
+	p13user_strength = PLUG13_STRENGTH_DEFAULT_PLUS
+	p13target_strength = PLUG13_STRENGTH_DEFAULT_PLUS
+
+	interaction_flags = INTERACTION_FLAG_ADJACENT | INTERACTION_FLAG_OOC_CONSENT | INTERACTION_FLAG_EXTREME_CONTENT //What I a person doesn't want to get killed? - Gardelin0
 
 /datum/interaction/lewd/throatfuck/display_interaction(mob/living/user, mob/living/partner)
 	var/message
@@ -122,10 +132,10 @@
 			"жёстко засовывает свой крепкий орган в горло <b>[partner]</b> и тем самым образом своего партнёра затыкает.",
 			"душит <b>[partner]</b>, снова и снова засовывая свой влажный орган по самые яйца.",
 			"молотит рот <b>[partner]</b> с чавкающим звуком и раз за разом приземляется своими яйцами аккурат в лицо.")]"
-		if(rand(3))
-			partner.emote("кашляет на [user]")
-			if(prob(1) && istype(partner))
-				partner.adjustOxyLoss(rand(2,3))
+		if(prob(10))
+			partner.emote("cough")
+			//if(prob(1) && istype(partner)) BLUEMOON DELETE не имеет смысла, сколько смотри modular_splurt\code\datums\interactions\lewd\lewd_datums.dm
+			//	partner.adjustOxyLoss(rand(2,3)) да-да, оно даёт и так 6 окси урона, шанс в 1 процент ради ещё 2-3 окси урона не имеет смысла
 		if(partner.a_intent == INTENT_HARM)
 			partner.adjustBruteLoss(rand(3,6))
 			retaliation_message = pick(

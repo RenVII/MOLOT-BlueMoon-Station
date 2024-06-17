@@ -315,25 +315,25 @@ GLOBAL_LIST_EMPTY(sechailers)
 					phrase_sound = "serve"
 				if(35) // BLUEMOON CHANGE start
 					phrase_text = "Космодесантники, в атаку!"
-					phrase_sound = "atack"
+					phrase_sound = "bluemoon_atack"
 				if(36)
 					phrase_text = "Очистить! Искоренить! Убить!"
-					phrase_sound = "clean_purges"
+					phrase_sound = "bluemoon_clean_purges"
 				if(37)
 					phrase_text = "Сдохни отброс!"
-					phrase_sound = "die_scum"
+					phrase_sound = "bluemoon_die_scum"
 				if(38)
 					phrase_text = "За императора!"
-					phrase_sound = "for_the_emperor"
+					phrase_sound = "bluemoon_for_the_emperor"
 				if(39)
 					phrase_text = "Еретики."
-					phrase_sound = "heretic"
+					phrase_sound = "bluemoon_heretic"
 				if(40)
 					phrase_text = "Исколечить, убить, сжечь!"
-					phrase_sound = "maim_kill_burn"
+					phrase_sound = "bluemoon_maim_kill_burn"
 				if(41)
 					phrase_text = "Смерть всем ксеносам."
-					phrase_sound = "death_to_alien" // BLUEMOON CHANGE end
+					phrase_sound = "bluemoon_death_to_alien" // BLUEMOON CHANGE end
 
 		if(aggressiveness <= 0)
 			usr.audible_message("[usr]'s Slut-o-Nator: <font color=#D45592 size='2'><b>[phrase_text]</b></font>")

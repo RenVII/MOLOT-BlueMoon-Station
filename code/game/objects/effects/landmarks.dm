@@ -145,8 +145,8 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	icon_state = "Curator"
 
 /obj/effect/landmark/start/lawyer
-	name = "Lawyer"
-	icon_state = "Lawyer"
+	name = "Internal Affairs Agent"
+	icon_state = "Internal Affairs Agent"
 
 /obj/effect/landmark/start/ntr
 	name = "NanoTrasen Representative"
@@ -405,6 +405,10 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark/start/new_player)
 	..()
 	GLOB.emergencyresponseteamspawn += get_turf(src)
 	return INITIALIZE_HINT_QDEL
+
+/obj/effect/landmark/ert_shuttle_brief_spawn
+	name = "ertshuttlebriefspawn"
+	icon_state = "ert_brief_spawn"
 
 /obj/effect/landmark/holding_facility
 	name = "Holding Facility"

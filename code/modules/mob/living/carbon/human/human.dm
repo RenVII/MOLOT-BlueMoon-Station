@@ -31,7 +31,7 @@
 	if(CONFIG_GET(flag/disable_stambuffer))
 		enable_intentional_sprint_mode()
 
-	RegisterSignal(src, COMSIG_COMPONENT_CLEAN_ACT, /atom.proc/clean_blood)
+	RegisterSignal(src, COMSIG_COMPONENT_CLEAN_ACT, TYPE_PROC_REF(/atom, clean_blood))
 	GLOB.human_list += src
 
 /mob/living/carbon/human/proc/setup_human_dna()
@@ -46,7 +46,7 @@
 		AddComponent(/datum/component/mood)
 /*	AddComponent(/datum/component/combat_mode) / BLUEMOON REMOVAL - боевые индикаторы присваиваются всем мобам в другом файле */
 	AddElement(/datum/element/flavor_text/carbon/temporary, "", "Set Pose (Temporary Flavor Text)", "This should be used only for things pertaining to the current round!", _save_key = null)
-	AddElement(/datum/element/strippable, GLOB.strippable_human_items, /mob/living/carbon/human/.proc/should_strip)
+	AddElement(/datum/element/strippable, GLOB.strippable_human_items, TYPE_PROC_REF(/mob/living/carbon/human, should_strip))
 
 /mob/living/carbon/human/Destroy()
 	QDEL_NULL(physiology)
@@ -427,7 +427,16 @@
 
 	//Check for weapons
 	if( (judgement_criteria & JUDGE_WEAPONCHECK) && weaponcheck)
-		if(!idcard || !(ACCESS_WEAPONS in idcard.access))
+	// BLUEMOON EDIT START - пермиты теперь типо работают
+		var/list/accesses = list()
+		if(idcard)
+			accesses += idcard.access
+		var/obj/item/clothing/under/U = w_uniform
+		if(U && U.attached_accessories)
+			for(var/obj/item/clothing/accessory/accs in U.attached_accessories)
+				accesses += accs.access
+	// BLUEMOON EDIT END
+		if(!(ACCESS_WEAPONS in accesses))
 			for(var/obj/item/I in held_items) //if they're holding a gun
 				if(weaponcheck.Invoke(I))
 					threatcount += 4
@@ -496,17 +505,17 @@
 		return
 	if(is_mouth_covered())
 		to_chat(src, "<span class='warning'>Remove your mask first!</span>")
-		return 0
+		return FALSE
 	if(C.is_mouth_covered())
-		to_chat(src, "<span class='warning'>Remove [ru_ego()] mask first!</span>")
-		return 0
+		to_chat(src, "<span class='warning'>Remove [p_their()] mask first!</span>")
+		return FALSE
 
 	if(C.cpr_time < world.time + 30)
 		visible_message("<span class='notice'>[src] is trying to perform CPR on [C.name]!</span>", \
 						"<span class='notice'>You try to perform CPR on [C.name]... Hold still!</span>")
 		if(!do_mob(src, C))
 			to_chat(src, "<span class='warning'>You fail to perform CPR on [C]!</span>")
-			return 0
+			return FALSE
 
 		var/they_breathe = !HAS_TRAIT(C, TRAIT_NOBREATH)
 		var/they_lung = C.getorganslot(ORGAN_SLOT_LUNGS)
@@ -538,6 +547,32 @@
 		if(..())
 			dropItemToGround(I)
 
+/**
+ * Used to update the makeup on a human and apply/remove lipstick traits, then store/unstore them on the head object in case it gets severed
+ */
+/mob/living/carbon/human/proc/update_lips(new_style, new_colour, apply_trait)
+	lip_style = new_style
+	lip_color = new_colour
+	update_body()
+
+	var/obj/item/bodypart/head/hopefully_a_head = get_bodypart(BODY_ZONE_HEAD)
+	REMOVE_TRAITS_IN(src, LIPSTICK_TRAIT)
+	hopefully_a_head?.stored_lipstick_trait = null
+
+	if(new_style && apply_trait)
+		ADD_TRAIT(src, apply_trait, LIPSTICK_TRAIT)
+		hopefully_a_head?.stored_lipstick_trait = apply_trait
+
+/**
+ * A wrapper for [mob/living/carbon/human/proc/update_lips] that tells us if there were lip styles to change
+ */
+
+/mob/living/carbon/human/proc/clean_lips()
+	if(isnull(lip_style) && lip_color == initial(lip_color))
+		return FALSE
+	update_lips(null)
+	return TRUE
+
 /mob/living/carbon/human/clean_blood()
 	var/mob/living/carbon/human/H = src
 	if(H.gloves)
@@ -567,7 +602,7 @@
 			electrocution_skeleton_anim = mutable_appearance(icon, "electrocuted_base")
 			electrocution_skeleton_anim.appearance_flags |= RESET_COLOR|KEEP_APART
 		add_overlay(electrocution_skeleton_anim)
-		addtimer(CALLBACK(src, .proc/end_electrocution_animation, electrocution_skeleton_anim), anim_duration)
+		addtimer(CALLBACK(src, PROC_REF(end_electrocution_animation), electrocution_skeleton_anim), anim_duration)
 
 	else //or just do a generic animation
 		flick_overlay_view(image(icon,src,"electrocuted_generic",ABOVE_MOB_LAYER), src, anim_duration)
@@ -717,7 +752,7 @@
 							"<span class='userdanger'>You try to throw up, but there's nothing in your stomach!</span>")
 		if(stun)
 			DefaultCombatKnockdown(200)
-		return 1
+		return TRUE
 	..()
 
 /mob/living/carbon/human/vv_get_dropdown()
@@ -812,16 +847,16 @@
 	return !incapacitated(ignore_restraints = TRUE) && (istype(target) && target.stat == CONSCIOUS && CHECK_MOBILITY(src, MOBILITY_STAND))
 
 /mob/living/carbon/human/proc/can_be_firemanned(mob/living/carbon/target)
-	return (ishuman(target) && !CHECK_MOBILITY(target, MOBILITY_STAND)) || ispAI(target)
+	return (ishuman(target) && (!CHECK_MOBILITY(target, MOBILITY_STAND) || HAS_TRAIT(target, TRAIT_BLUEMOON_LIGHT))) || ispAI(target)
 
 /mob/living/carbon/human/proc/fireman_carry(mob/living/carbon/target)
-	var/carrydelay = 50 //if you have latex you are faster at grabbing
+	var/carrydelay = 40 //if you have latex you are faster at grabbing
 	var/skills_space = "" //cobby told me to do this
 	if(HAS_TRAIT(src, TRAIT_QUICKER_CARRY))
-		carrydelay = 30
+		carrydelay = 20
 		skills_space = "профессионально "
-	else if(HAS_TRAIT(src, TRAIT_QUICK_CARRY))
-		carrydelay = 40
+	else if(HAS_TRAIT(src, TRAIT_QUICK_CARRY) || HAS_TRAIT(target, TRAIT_BLUEMOON_LIGHT))
+		carrydelay = 30
 		skills_space = "быстро "
 	// BLUEMOON ADDITION AHEAD - тяжёлых и сверхтяжёлых персонажей нельзя нести на плече
 	if(HAS_TRAIT(target, TRAIT_BLUEMOON_HEAVY) || HAS_TRAIT(target, TRAIT_BLUEMOON_HEAVY_SUPER))

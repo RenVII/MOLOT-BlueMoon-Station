@@ -1103,7 +1103,7 @@
 					to_chat(M, "<span class='boldannounce'>The reason is: [reason]</span>")
 					to_chat(M, "<span class='danger'>This jobban will be lifted in [mins] minutes.</span>")
 					href_list["jobban2"] = 1 // lets it fall through and refresh
-					return 1
+					return TRUE
 				if("Нет")
 					var/reason = input(usr,"Please State Reason For Banning [M.key].","Reason") as message|null
 					severity = input("Set the severity of the note/ban.", "Severity", null, null) as null|anything in list("High", "Medium", "Minor", "None")
@@ -1129,7 +1129,7 @@
 						to_chat(M, "<span class='boldannounce'>The reason is: [reason]</span>")
 						to_chat(M, "<span class='danger'>Jobban can be lifted only upon request.</span>")
 						href_list["jobban2"] = 1 // lets it fall through and refresh
-						return 1
+						return TRUE
 				if("Cancel")
 					return
 
@@ -1158,8 +1158,8 @@
 				message_admins("<span class='adminnotice'>[key_name_admin(usr)] unbanned [key_name_admin(M)] from [msg].</span>")
 				to_chat(M, "<span class='boldannounce'><BIG>You have been un-jobbanned by [usr.client.key] from [msg].</BIG></span>")
 				href_list["jobban2"] = 1 // lets it fall through and refresh
-			return 1
-		return 0 //we didn't do anything!
+			return TRUE
+		return FALSE //we didn't do anything!
 
 	else if(href_list["boot2"])
 		if(!check_rights(R_ADMIN))
@@ -2275,7 +2275,7 @@
 
 		var/atom/target //Where the object will be spawned
 		var/where = href_list["object_where"]
-		if (!( where in list("onfloor","frompod","inhand","inmarked") ))
+		if (!( where in list("onfloor","frompod","fromquantumspread","inhand","inmarked") ))
 			where = "onfloor"
 
 
@@ -2286,7 +2286,7 @@
 					where = "onfloor"
 				target = usr
 
-			if("onfloor", "frompod")
+			if("onfloor", "frompod", "fromquantumspread")
 				switch(href_list["offset_type"])
 					if ("absolute")
 						target = locate(0 + X,0 + Y,0 + Z)
@@ -2303,9 +2303,12 @@
 					target = marked_datum
 
 		var/obj/structure/closet/supplypod/centcompod/pod
+		var/datum/effect_system/spark_spread/quantum/sparks
 		if(target)
 			if(where == "frompod")
 				pod = new()
+			if(where == "fromquantumspread")
+				sparks = new
 			for (var/path in paths)
 				for (var/i = 0; i < number; i++)
 					if(path in typesof(/turf))
@@ -2340,6 +2343,12 @@
 
 		if(pod)
 			new /obj/effect/pod_landingzone(target, pod)
+
+		if(sparks)
+			playsound(get_turf(target.loc), 'sound/magic/Repulse.ogg', 100, 1)
+			sparks.set_up(10, 1, target)
+			sparks.attach(target.loc)
+			sparks.start()
 
 		if (number == 1)
 			log_admin("[key_name(usr)] created a [english_list(paths)]")

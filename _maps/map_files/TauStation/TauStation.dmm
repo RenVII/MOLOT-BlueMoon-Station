@@ -3399,7 +3399,7 @@
 	dir = 8
 	},
 /obj/effect/turf_decal/tile/red,
-/obj/item/clothing/suit/armor/brigdoc/armor,
+/obj/item/clothing/suit/armor/brigdoc,
 /turf/open/floor/plasteel/showroomfloor,
 /area/security/brig)
 "bhU" = (
@@ -12787,7 +12787,7 @@
 	},
 /obj/item/gun/energy/temperature/security,
 /obj/item/gun/energy/ionrifle,
-/obj/item/clothing/suit/armor/laserproof,
+/obj/item/clothing/suit/hooded/ablative,
 /obj/effect/turf_decal/bot,
 /turf/open/floor/plasteel/dark,
 /area/ai_monitored/security/armory)
@@ -41332,7 +41332,7 @@
 /turf/open/floor/plasteel,
 /area/cargo/storage)
 "omF" = (
-/obj/item/circlegame,
+/obj/item/hand_item/circlegame,
 /turf/open/floor/wood{
 	icon_state = "wood-broken2"
 	},
@@ -47379,7 +47379,7 @@
 /obj/item/hand_labeler{
 	pixel_y = 8
 	},
-/obj/item/destTagger{
+/obj/item/dest_tagger{
 	pixel_x = 4;
 	pixel_y = 3
 	},
@@ -50490,7 +50490,7 @@
 /obj/machinery/newscaster/security_unit{
 	pixel_y = -30
 	},
-/obj/item/clothing/suit/armor/brigdoc/armor,
+/obj/item/clothing/suit/armor/brigdoc,
 /turf/open/floor/plasteel/showroomfloor,
 /area/security/brig)
 "ryJ" = (
@@ -62297,7 +62297,7 @@
 	pixel_x = 3;
 	pixel_y = 4
 	},
-/obj/item/destTagger{
+/obj/item/dest_tagger{
 	pixel_x = 4;
 	pixel_y = 3
 	},

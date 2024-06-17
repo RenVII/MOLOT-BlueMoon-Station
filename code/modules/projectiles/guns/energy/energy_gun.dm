@@ -21,6 +21,7 @@
 	charge_sections = 3
 	gunlight_state = "mini-light"
 	can_flashlight = 0 // Can't attach or detach the flashlight, and override it's icon update
+	shot_type_overlay = FALSE
 
 /obj/item/gun/energy/e_gun/mini/Initialize(mapload)
 	gun_light = new /obj/item/flashlight/seclite(src)
@@ -31,6 +32,7 @@
 	desc = "Military issue energy gun, is able to fire stun rounds."
 	icon_state = "energytac"
 	ammo_x_offset = 2
+	cell_type = /obj/item/stock_parts/cell{charge = 3500; maxcharge = 3500}  //bluemoon change
 	ammo_type = list(/obj/item/ammo_casing/energy/electrode/spec, /obj/item/ammo_casing/energy/disabler, /obj/item/ammo_casing/energy/laser)
 
 /obj/item/gun/energy/e_gun/old
@@ -45,6 +47,8 @@
 	desc = "A modified version of the basic phaser gun, this one fires less concentrated energy bolts designed for target practice."
 	ammo_type = list(/obj/item/ammo_casing/energy/disabler, /obj/item/ammo_casing/energy/laser/practice)
 	icon_state = "decloner"
+	//You have no icons for energy types, you're a decloner
+	modifystate = FALSE
 
 /obj/item/gun/energy/e_gun/hos
 	name = "\improper X-01 MultiPhase Energy Gun"
@@ -56,7 +60,7 @@
 	ammo_x_offset = 4
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | ACID_PROOF
 	var/last_altfire = 0
-	var/altfire_delay = 0
+	var/altfire_delay = CLICK_CD_RANGE // BLUEMOON EDIT - WAS 0 (фикс отсутствия КД при стрельбе оружия ГСБ)
 
 /obj/item/gun/energy/e_gun/hos/altafterattack(atom/target, mob/user, proximity_flag, params)
 	. = TRUE
@@ -79,6 +83,7 @@
 	lefthand_file = 'icons/mob/inhands/weapons/guns_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/weapons/guns_righthand.dmi'
 	ammo_type = list(/obj/item/ammo_casing/energy/net, /obj/item/ammo_casing/energy/trap)
+	modifystate = FALSE
 	can_flashlight = 0
 	ammo_x_offset = 1
 
@@ -162,3 +167,62 @@
 				. += "[icon_state]_fail_1"
 			if(151 to INFINITY)
 				. += "[icon_state]_fail_2"
+
+
+/obj/item/gun/energy/e_gun/nuclear/ert
+	name = "ERT energy pistol"
+	desc = "Advanced energy pistol with an experimental miniaturized nuclear reactor that automatically charges the internal power cell."
+	icon_state = "nucgun_ert"
+	item_state = "gun"
+	charge_delay = 5
+	w_class = WEIGHT_CLASS_SMALL
+	pin = /obj/item/firing_pin/implant/mindshield
+	cell_type = /obj/item/stock_parts/cell{charge = 6000; maxcharge = 6000}
+	can_charge = 0
+	ammo_x_offset = 1
+	ammo_type = list(/obj/item/ammo_casing/energy/disabler, /obj/item/ammo_casing/energy/laser)
+	selfcharge = EGUN_SELFCHARGE * 5
+	fail_tick = 0
+	fail_chance = 1
+	fire_select_modes = list(SELECT_SEMI_AUTOMATIC, SELECT_BURST_SHOT)
+	fire_delay = 2
+	burst_size = 2
+	burst_spread = 16
+	burst_shot_delay = 2
+	var/icon_charge = "nucgun"
+
+
+/obj/item/gun/energy/e_gun/nuclear/ert/update_overlays()
+	. = ..()
+	if(QDELETED(src))
+		return
+	if(!automatic_charge_overlays)
+		return
+	var/overlay_icon_state  = "[icon_charge]_charge"
+	var/ratio = get_charge_ratio()
+	if (modifystate)
+		var/obj/item/ammo_casing/energy/shot = ammo_type[current_firemode_index]
+		. += "[icon_charge]_[shot.select_name]"
+		overlay_icon_state += "_[shot.select_name]"
+	if(ratio == 0)
+		. += "[icon_charge]_empty"
+	else
+		if(!shaded_charge)
+			var/mutable_appearance/charge_overlay = mutable_appearance(icon, overlay_icon_state)
+			for(var/i = ratio, i >= 1, i--)
+				charge_overlay.pixel_x = ammo_x_offset * (i - 1)
+				charge_overlay.pixel_y = ammo_y_offset * (i - 1)
+				. += new /mutable_appearance(charge_overlay)
+		else
+			. += "[icon_charge]_charge[ratio]"
+
+	if(crit_fail)
+		. += "[icon_charge]_fail_3"
+	else
+		switch(fail_tick)
+			if(0)
+				. += "[icon_charge]_fail_0"
+			if(1 to 150)
+				. += "[icon_charge]_fail_1"
+			if(151 to INFINITY)
+				. += "[icon_charge]_fail_2"

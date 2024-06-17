@@ -61,7 +61,7 @@
 	if(target)
 		unset_target()
 	target = newtarget
-	RegisterSignal(target, COMSIG_PARENT_QDELETING, .proc/unset_target)
+	RegisterSignal(target, COMSIG_PARENT_QDELETING, PROC_REF(unset_target))
 
 /obj/item/pinpointer/proc/unset_target()
 	if(!target)
@@ -156,7 +156,7 @@
 		user.visible_message("<span class='notice'>[user]'s pinpointer fails to detect a signal.</span>", "<span class='notice'>Your pinpointer fails to detect a signal.</span>")
 		return
 
-	var/A = input(user, "Person to track", "Pinpoint") in names
+	var/A = tgui_input_list(user, "Сотрудники с включёнными в третий режим датчиками:", "Пинпоинтер", names)
 	if(!A || QDELETED(src) || !user || !user.is_holding(src) || user.incapacitated())
 		return
 

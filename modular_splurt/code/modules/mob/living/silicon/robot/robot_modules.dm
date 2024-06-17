@@ -24,10 +24,11 @@
 			"Assaultron" = image(icon = 'modular_splurt/icons/mob/robots.dmi', icon_state = "assaultron_standard"),
 			"Handy" = image(icon = 'modular_splurt/icons/mob/robots.dmi', icon_state = "handy"),
 			"Robo-Brain" = image(icon = 'modular_splurt/icons/mob/robots.dmi', icon_state = "robobrain"),
-			"Cyclone" = image(icon = 'modular_splurt/icons/mob/robots.dmi', icon_state = "cyclone")
+			"Cyclone" = image(icon = 'modular_splurt/icons/mob/robots.dmi', icon_state = "cyclone"),
+			"SmollRaptor" = image(icon = 'modular_zubbers/icons/mob/smolraptor.dmi', icon_state = "smolraptor-b") // BubberStation Port; Made by aKhro/@aKromatopzia (GitHub)
 			)
 		stand_icons = sort_list(stand_icons)
-	var/stand_borg_icon = show_radial_menu(R, R , stand_icons, custom_check = CALLBACK(src, .proc/check_menu, R), radius = 42, require_near = TRUE)
+	var/stand_borg_icon = show_radial_menu(R, R , stand_icons, custom_check = CALLBACK(src, PROC_REF(check_menu), R), radius = 42, require_near = TRUE)
 	if(!stand_borg_icon)
 		return
 	switch(stand_borg_icon)
@@ -94,6 +95,10 @@
 			cyborg_base_icon = "cyclone"
 			cyborg_icon_override = 'modular_splurt/icons/mob/robots.dmi'
 			hat_offset = 3
+		if("SmollRaptor") // BubberStation Port; Made by aKhro/@aKromatopzia (GitHub)
+			cyborg_base_icon = "smolraptor"
+			cyborg_icon_override = 'modular_zubbers/icons/mob/smolraptor.dmi'
+			dogborg = TRUE
 	return ..()
 
 /obj/item/robot_module/clown/be_transformed_to(obj/item/robot_module/old_module)
@@ -112,7 +117,7 @@
 			"BootyS" = image(icon = 'modular_splurt/icons/mob/robots.dmi', icon_state = "bootystandardS")
 		)
 		clown_icons = sort_list(clown_icons)
-	var/clown_borg_icon = show_radial_menu(R, R , clown_icons, custom_check = CALLBACK(src, .proc/check_menu, R), radius = 42, require_near = TRUE)
+	var/clown_borg_icon = show_radial_menu(R, R , clown_icons, custom_check = CALLBACK(src, PROC_REF(check_menu), R), radius = 42, require_near = TRUE)
 	if(!clown_borg_icon)
 		return
 	switch(clown_borg_icon)
@@ -164,7 +169,7 @@
 		/obj/item/stack/wrapping_paper/xmas/cyborg,
 		/obj/item/assembly/flash/cyborg,
 		/obj/item/hand_labeler/cyborg,
-		/obj/item/destTagger,
+		/obj/item/dest_tagger,
 		/obj/item/crowbar/cyborg,
 		/obj/item/extinguisher,
 		/obj/item/export_scanner,
@@ -196,14 +201,16 @@
 		"FMeka" = image(icon = 'modular_bluemoon/Gardelin0/icons/mob/tallrobot.dmi', icon_state = "fmekacargo"), //Lyoll Request (Skyrat Port)
 		"K4" = image(icon = 'modular_bluemoon/Gardelin0/icons/mob/tallrobot.dmi', icon_state = "k4tcargo"), //Lyoll Request (Skyrat Port)
 		"K4 Alt" = image(icon = 'modular_bluemoon/Gardelin0/icons/mob/tallrobot.dmi', icon_state = "k4tcargo_alt1"), //Lyoll Request (Skyrat Port)
-		"MMeka" = image(icon = 'modular_bluemoon/Gardelin0/icons/mob/tallrobot.dmi', icon_state = "mmekacargo") //Lyoll Request (Skyrat Port)
+		"MMeka" = image(icon = 'modular_bluemoon/Gardelin0/icons/mob/tallrobot.dmi', icon_state = "mmekacargo"), //Lyoll Request (Skyrat Port)
+		"Raptor V-4" = image(icon = 'modular_splurt/icons/mob/robots_64x45.dmi', icon_state = "caraptor-b"), // ChompS Port (base); Additional spriting by @ertyuk421
+		"SmollRaptor" = image(icon = 'modular_zubbers/icons/mob/smolraptor.dmi', icon_state = "smolraptor_crg-b") // BubberStation Port; Made by aKhro/@aKromatopzia (GitHub)
 		)
 		var/list/L = list("Cargohound" = "cargohound", "Cargohound Dark" = "cargohounddark", "Vale" = "valecargo", "Feline" = "vixcargo")
 		for(var/a in L)
 			var/image/wide = image(icon = 'modular_splurt/icons/mob/widerobots_cargo.dmi', icon_state = L[a])
 			wide.pixel_x = -16
 			cargo_icons[a] = wide
-	var/cargo_borg_icon = show_radial_menu(R, R , cargo_icons, custom_check = CALLBACK(src, .proc/check_menu, R), radius = 42, require_near = TRUE)
+	var/cargo_borg_icon = show_radial_menu(R, R , cargo_icons, custom_check = CALLBACK(src, PROC_REF(check_menu), R), radius = 42, require_near = TRUE)
 	switch(cargo_borg_icon)
 		if("Default")
 			cyborg_base_icon = "cargoborg"
@@ -276,6 +283,10 @@
 			cyborg_base_icon = "caraptor"
 			cyborg_icon_override = 'modular_splurt/icons/mob/robots_64x45.dmi'
 			sleeper_overlay = "caraptor-sleeper"
+			dogborg = TRUE
+		if("SmollRaptor") // BubberStation Port; Made by aKhro/@aKromatopzia (GitHub)
+			cyborg_base_icon = "smolraptor_crg"
+			cyborg_icon_override = 'modular_zubbers/icons/mob/smolraptor.dmi'
 			dogborg = TRUE
 		else
 			return FALSE
