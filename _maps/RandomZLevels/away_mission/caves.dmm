@@ -2718,10 +2718,13 @@
 	},
 /area/awaymission/caves/BMP_asteroid/level_two)
 "LE" = (
-/obj/effect/decal/cleanable/robot_debris/old,
-/obj/machinery/suit_storage_unit/mining/eva,
-/turf/open/floor/plasteel,
-/area/awaymission/caves/listeningpost)
+/obj/structure/destructible/clockwork/ocular_warden,
+/turf/open/lava/smooth{
+	desc = "Looks hot.";
+	initial_gas_mix = "n2=23;o2=14";
+	luminosity = 5
+	},
+/area/awaymission/caves/BMP_asteroid/level_four)
 "LJ" = (
 /mob/living/simple_animal/hostile/skeleton/plasmaminer/jackhammer{
 	stop_automated_movement = 1
@@ -2827,7 +2830,9 @@
 	},
 /area/awaymission/caves/BMP_asteroid/level_two)
 "Wx" = (
-/obj/structure/destructible/clockwork/ocular_warden,
+/obj/structure/destructible/clockwork/ocular_warden{
+	faction = list("skeleton")
+	},
 /turf/open/lava/smooth{
 	desc = "Looks hot.";
 	initial_gas_mix = "n2=23;o2=14";
@@ -12557,7 +12562,7 @@ bV
 bV
 bL
 eF
-LE
+eg
 eq
 LJ
 eJ
@@ -50231,10 +50236,10 @@ ad
 ad
 ad
 ad
-ai
-ai
-ai
-ai
+ad
+ad
+ad
+ad
 ad
 ad
 ad
@@ -50488,13 +50493,13 @@ ad
 ad
 ad
 ad
-ai
 ad
 ad
-ai
-ai
-ai
-ai
+ad
+ad
+ad
+ad
+ad
 ad
 ad
 ad
@@ -50744,20 +50749,20 @@ ad
 ad
 ad
 ad
-ai
-ai
 ad
 ad
 ad
 ad
 ad
-ai
-ai
-ai
 ad
 ad
 ad
-Wx
+ad
+ad
+ad
+ad
+ad
+ad
 ad
 ad
 ad
@@ -50936,7 +50941,7 @@ ad
 ad
 ad
 ad
-Wx
+LE
 ad
 ad
 ad
@@ -51000,8 +51005,6 @@ ad
 ad
 ad
 ad
-ai
-ai
 ad
 ad
 ad
@@ -51010,7 +51013,9 @@ ad
 ad
 ad
 ad
-ai
+ad
+ad
+ad
 ad
 ad
 ad
@@ -51199,7 +51204,7 @@ ai
 ai
 ad
 ad
-Wx
+LE
 ad
 ad
 ad
@@ -51256,8 +51261,8 @@ ad
 ad
 ad
 ad
-ai
-ai
+ad
+ad
 ad
 ad
 ad
@@ -51512,8 +51517,8 @@ ad
 ad
 ad
 ad
-ai
-ai
+ad
+ad
 ad
 ad
 ad
@@ -51768,8 +51773,8 @@ ai
 ai
 ad
 ad
-ai
-ai
+ad
+ad
 ad
 ad
 ad
@@ -52024,8 +52029,8 @@ ai
 ai
 ad
 ad
-ai
-ai
+ad
+ad
 ad
 ad
 ad
@@ -52278,10 +52283,10 @@ ad
 ai
 ai
 ai
-ai
 ad
-ai
-ai
+ad
+ad
+ad
 ad
 ad
 ad
@@ -52535,28 +52540,28 @@ ad
 ad
 ad
 ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
 ai
 ai
-ai
 ad
 ad
 ad
-ad
-ad
-ad
-ad
-ad
-ad
-ad
-ad
-ad
-ad
-ad
-ai
-ai
-ad
-ad
-Wx
 ad
 ad
 ad
@@ -52734,7 +52739,7 @@ ad
 ad
 ad
 ad
-Wx
+LE
 ad
 ad
 ai
@@ -52810,7 +52815,7 @@ ad
 ad
 ad
 ad
-ai
+ad
 ad
 ad
 ad
@@ -52996,7 +53001,7 @@ ad
 ad
 ad
 ad
-Wx
+LE
 ad
 ad
 ad
@@ -53066,8 +53071,8 @@ ad
 ad
 ad
 ad
-ai
-ai
+ad
+ad
 ad
 ad
 ad
@@ -53322,8 +53327,8 @@ ad
 ad
 ad
 ad
-ai
-ai
+ad
+ad
 ad
 ad
 ad
@@ -53578,8 +53583,8 @@ ad
 ad
 ad
 ad
-ai
-ai
+ad
+ad
 ad
 ad
 ad
@@ -53834,8 +53839,8 @@ ad
 ad
 ad
 ad
-ai
-ai
+ad
+ad
 ad
 ad
 ad
@@ -54078,20 +54083,20 @@ ai
 ai
 ai
 ai
-ai
-ai
-ai
-ai
-ai
-ai
-ai
-ai
-ai
-ai
-ai
-ai
-ai
-ai
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
+ad
 ad
 ad
 ad
@@ -57900,7 +57905,7 @@ br
 ax
 ai
 ax
-pA
+br
 br
 aR
 ax
@@ -59699,7 +59704,7 @@ br
 ax
 ai
 ax
-pA
+br
 br
 br
 ax
